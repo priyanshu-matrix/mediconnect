@@ -45,7 +45,9 @@ const NearbyShop = (props) => {
           (position) => {
             const lat = position.coords.latitude;
             const long = position.coords.longitude;
-            resolve({ lat, long });
+
+            // resolve({ lat, long }); 21.2497572,81.6012525
+            resolve({ lat: 21.2497572, long: 81.6012525 });
           },
           (error) => {
             alert("Error obtaining location");
