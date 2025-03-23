@@ -99,6 +99,7 @@ const NearbyShop = (props) => {
       sold_quantity: quantity,
       medicine_id: currentMedID,
       email: shopEmail,
+      user_mail:localStorage.getItem("email"),
     };
     console.log(data);
 
@@ -342,25 +343,85 @@ const NearbyShop = (props) => {
 
       {/* Buy Popup */}
       {showBuyPopup && (
-        <div className="popup" style={{ display: "block" }}>
-          <div className="popup-content">
-            <span className="close" onClick={() => setShowBuyPopup(false)}>
+        <div className="popup-overlay" style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backdropFilter: "blur(5px)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1000
+        }}>
+          <div className="popup-content" style={{
+            backgroundColor: "white",
+            borderRadius: "12px",
+            padding: "24px",
+            width: "90%",
+            maxWidth: "400px",
+            boxShadow: "0 5px 15px rgba(0, 0, 0, 0.2)",
+            animation: "fadeIn 0.3s ease-out",
+            position: "relative"
+          }}>
+            <span className="close" onClick={() => setShowBuyPopup(false)} style={{
+              position: "absolute",
+              top: "12px",
+              right: "16px",
+              fontSize: "24px",
+              cursor: "pointer",
+              color: "#888"
+            }}>
               &times;
             </span>
-            <h2>Buy Medicine</h2>
-            <div>
-              <label htmlFor="quantity">Quantity:</label>
+            <h2 style={{ marginTop: "8px", marginBottom: "20px", color: "#333", textAlign: "center" }}>Buy Medicine</h2>
+            <div style={{ marginBottom: "20px" }}>
+              <label htmlFor="quantity" style={{ display: "block", marginBottom: "8px", color: "#555" }}>Quantity:</label>
               <input
                 type="number"
                 id="quantity"
                 min="1"
                 value={quantity}
                 onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "6px",
+                  border: "1px solid #ddd",
+                  fontSize: "16px"
+                }}
               />
             </div>
-            <div>
-              <button onClick={() => setShowBuyPopup(false)}>Cancel</button>
-              <button onClick={handlePurchase}>Confirm</button>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: "12px" }}>
+              <button 
+                onClick={() => setShowBuyPopup(false)}
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: "6px",
+                  border: "1px solid #ddd",
+                  backgroundColor: "#f5f5f5",
+                  cursor: "pointer",
+                  flex: 1,
+                  fontSize: "16px"
+                }}>
+                Cancel
+              </button>
+              <button 
+                onClick={handlePurchase}
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: "6px",
+                  border: "none",
+                  backgroundColor: "#4CAF50",
+                  color: "white",
+                  cursor: "pointer",
+                  flex: 1,
+                  fontSize: "16px"
+                }}>
+                Confirm
+              </button>
             </div>
           </div>
         </div>
@@ -368,30 +429,86 @@ const NearbyShop = (props) => {
 
       {/* Purchase Details Popup */}
       {showDetailsPopup && (
-        <div className="popup" style={{ display: "block" }}>
-          <div className="popup-content">
-            <span className="close" onClick={() => setShowDetailsPopup(false)}>
+        <div className="popup-overlay" style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backdropFilter: "blur(5px)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1000
+        }}>
+          <div className="popup-content" style={{
+            backgroundColor: "white",
+            borderRadius: "12px",
+            padding: "24px",
+            width: "90%",
+            maxWidth: "400px",
+            boxShadow: "0 5px 15px rgba(0, 0, 0, 0.2)",
+            animation: "fadeIn 0.3s ease-out",
+            position: "relative"
+          }}>
+            <span className="close" onClick={() => setShowDetailsPopup(false)} style={{
+              position: "absolute",
+              top: "12px",
+              right: "16px",
+              fontSize: "24px",
+              cursor: "pointer",
+              color: "#888"
+            }}>
               &times;
             </span>
-            <h2>Purchase Details</h2>
-            <div>
-              <p>
+            <h2 style={{ marginTop: "8px", marginBottom: "20px", color: "#333", textAlign: "center" }}>Purchase Details</h2>
+            <div style={{ marginBottom: "20px" }}>
+              <p style={{ margin: "10px 0", fontSize: "16px", color: "#555" }}>
                 <strong>Medicine:</strong> {medicineName}
               </p>
-              <p>
+              <p style={{ margin: "10px 0", fontSize: "16px", color: "#555" }}>
                 <strong>Quantity:</strong> {quantity}
               </p>
-              <p>
+              <p style={{ margin: "10px 0", fontSize: "16px", color: "#555" }}>
                 <strong>Frequency:</strong> {frequency}
               </p>
-              <p>
+              <p style={{ margin: "10px 0", fontSize: "16px", color: "#555" }}>
                 <strong>Side Effects:</strong> {sideEffect}
               </p>
-              <p>
+              <p style={{ margin: "10px 0", fontSize: "16px", color: "#555" }}>
                 <strong>Precautions:</strong> {precaution}
               </p>
             </div>
-            <button onClick={handleConfirmDetails}>Confirm</button>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: "12px" }}>
+              <button 
+                onClick={() => setShowDetailsPopup(false)}
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: "6px",
+                  border: "1px solid #ddd",
+                  backgroundColor: "#f5f5f5",
+                  cursor: "pointer",
+                  flex: 1,
+                  fontSize: "16px"
+                }}>
+                Cancel
+              </button>
+              <button 
+                onClick={handleConfirmDetails}
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: "6px",
+                  border: "none",
+                  backgroundColor: "#4CAF50",
+                  color: "white",
+                  cursor: "pointer",
+                  flex: 1,
+                  fontSize: "16px"
+                }}>
+                Confirm
+              </button>
+            </div>
           </div>
         </div>
       )}
