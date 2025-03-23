@@ -5,6 +5,9 @@ const UserSearch = () => {
   const [searchInput, setSearchInput] = useState("");
   const [medicines, setMedicines] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
+  const [healthQuestion, setHealthQuestion] = useState("");
+  const [healthResponse, setHealthResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   let navigate = useNavigate();
 
   // Fetch medicines on component mount
@@ -50,35 +53,83 @@ const UserSearch = () => {
   };
 
   return (
-    <div className="container" style={{ marginTop: "50px", height: "50vh" }}>
-      <div className="search-container" style={styles.container}>
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Search for medicines..."
-          value={searchInput}
-          onChange={handleInputChange}
-          style={styles.input}
-        />
+    <>
+      <div className="container" style={{ marginTop: "50px", height: "100vh" }}>
+        <div className="search-container" style={styles.container}>
+          <h2 style={{ textAlign: "center" }}>Search for medicines</h2>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search for medicines..."
+            value={searchInput}
+            onChange={handleInputChange}
+            style={styles.input}
+          />
 
-        {suggestions.length > 0 && (
-          <div
-            id="suggestions"
-            style={{ ...styles.suggestions, color: "black" }}
+          {suggestions.length > 0 && (
+            <div
+              id="suggestions"
+              style={{ ...styles.suggestions, color: "black" }}
+            >
+              {suggestions.map((medicine, index) => (
+                <div
+                  key={index}
+                  style={styles.suggestionItem}
+                  onClick={() => handleSuggestionClick(medicine)}
+                >
+                  {medicine}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      <div className="health-advisor-container" style={styles.healthContainer}>
+        <h2 style={{ textAlign: "center", marginTop: "40px" }}>Ask Health Questions</h2>
+        <div style={styles.healthPrompt}>
+          <textarea
+            placeholder="Ask about common diseases, symptoms, or general health advice..."
+            value={healthQuestion || ""}
+            onChange={(e) => setHealthQuestion(e.target.value)}
+            style={styles.textarea}
+          />
+          <button
+            onClick={async () => {
+              try {
+                if (!healthQuestion) return;
+                setIsLoading(true);
+                const response = await fetch("http://127.0.0.1:8000/api/askai", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ prompt: healthQuestion }),
+                });
+                const data = await response.json();
+                if (data.status === "True") {
+                  setHealthResponse(data.response);
+                } else {
+                  setHealthResponse("Sorry, there was an error processing your request.");
+                }
+              } catch (error) {
+                console.error("Error getting health advice:", error);
+                setHealthResponse("Error connecting to the health advisor service.");
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            className="btn btn-success"
+            style={styles.button}
+            disabled={isLoading}
           >
-            {suggestions.map((medicine, index) => (
-              <div
-                key={index}
-                style={styles.suggestionItem}
-                onClick={() => handleSuggestionClick(medicine)}
-              >
-                {medicine}
-              </div>
-            ))}
+            {isLoading ? "Loading..." : "Get Advice"}
+          </button>
+        </div>
+        {healthResponse && (
+          <div style={styles.responseContainer}>
+            <p style={styles.responseText}>{healthResponse}</p>
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
@@ -120,6 +171,50 @@ const styles = {
     hover: {
       backgroundColor: "#f5f5f5",
     },
+  },
+  healthContainer: {
+    width: "100%",
+    maxWidth: "800px",
+    margin: "0 auto",
+    padding: "20px",
+  },
+  healthPrompt: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    marginBottom: "20px",
+  },
+  textarea: {
+    width: "100%",
+    minHeight: "100px",
+    padding: "12px",
+    borderRadius: "8px",
+    border: "1px solid #ddd",
+    fontSize: "16px",
+    resize: "vertical",
+  },
+  button: {
+    backgroundColor: "#4CAF50",
+    color: "white",
+    border: "none",
+    padding: "12px 20px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontSize: "16px",
+    fontWeight: "bold",
+    transition: "background-color 0.3s",
+  },
+  responseContainer: {
+    backgroundColor: "#f9f9f9",
+    borderRadius: "8px",
+    padding: "15px",
+    marginTop: "20px",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    color: "black"
+  },
+  responseText: {
+    lineHeight: "1.6",
+    fontSize: "16px",
   },
 };
 
