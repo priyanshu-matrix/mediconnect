@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-// Uncomment these lines if using awesome markers
+// Uncomment these lines if you decide to use Awesome Markers
 // import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
 // import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
 
@@ -15,12 +15,12 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-const NearbyShop = () => {
+const NearbyShop = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
-  // New ref to store shop markers by shop id
+  // Ref to store shop markers by shop id
   const markersRef = useRef({});
 
   // State variables
@@ -137,7 +137,7 @@ const NearbyShop = () => {
     fetchData();
   }, []);
 
-  // Setup and update the map when user location or shops change
+  // Setup and update the map when userLocation or shops change
   useEffect(() => {
     if (!userLocation || !mapRef.current) return;
 
@@ -176,7 +176,7 @@ const NearbyShop = () => {
     // Reset markersRef for shop markers
     markersRef.current = {};
 
-    // Add shop markers if available and store a reference for each marker
+    // Add shop markers and store their references
     if (shops && shops.length > 0) {
       shops.forEach((shop) => {
         if (
@@ -193,10 +193,9 @@ const NearbyShop = () => {
               `<b>${shop.shop_name}</b><br>Distance: ${shop.distance} km`
             );
 
-          // Store the marker reference using shop id as key
           markersRef.current[shop.id] = marker;
 
-          // When a marker is clicked, fly to it and open the popup
+          // When a marker is clicked, fly to it and open its popup
           marker.on("click", () => {
             if (mapInstanceRef.current) {
               mapInstanceRef.current.flyTo(marker.getLatLng(), 15, {
@@ -209,6 +208,35 @@ const NearbyShop = () => {
         }
       });
     }
+
+    // Add custom control button to return to user's location
+    const locateControl = L.control({ position: "topleft" });
+    locateControl.onAdd = function (map) {
+      const container = L.DomUtil.create(
+        "div",
+        "leaflet-bar leaflet-control leaflet-control-custom"
+      );
+      container.style.backgroundColor = "white";
+      container.style.width = "30px";
+      container.style.height = "30px";
+      container.style.display = "flex";
+      container.style.justifyContent = "center";
+      container.style.alignItems = "center";
+      container.style.cursor = "pointer";
+      container.style.fontSize = "18px";
+      container.style.color = "black";
+      container.title = "Return to your location";
+      container.innerHTML = '<i class="fa fa-location-arrow"></i>';
+      container.onclick = (e) => {
+        e.preventDefault();
+        map.flyTo([userLocation.lat, userLocation.long], 15, {
+          animate: true,
+          duration: 1,
+        });
+      };
+      return container;
+    };
+    locateControl.addTo(mapInstanceRef.current);
 
     // Invalidate map size to ensure proper rendering
     setTimeout(() => {
@@ -226,7 +254,7 @@ const NearbyShop = () => {
     };
   }, [userLocation, shops]);
 
-  // Handle viewing a shop on the map: fly to the marker and open its popup
+  // Handle viewing a shop on the map: fly to its marker and open its popup
   const handleViewOnMap = (shop) => {
     if (mapInstanceRef.current) {
       mapInstanceRef.current.flyTo(
@@ -234,7 +262,6 @@ const NearbyShop = () => {
         15,
         { animate: true, duration: 1 }
       );
-      // Open the associated marker's popup (label)
       if (markersRef.current[shop.id]) {
         markersRef.current[shop.id].openPopup();
       }
@@ -260,53 +287,58 @@ const NearbyShop = () => {
   };
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
       <h2>Nearby Medical Shops</h2>
-      <div id="med-name">Medicine Name: {medicineName}</div>
+      <div id="med-name">Medicine Name:<b> {medicineName}</b></div>
 
       {/* Map container */}
-      <div
-        id="map"
-        ref={mapRef}
-        style={{ height: "400px", marginBottom: "20px" }}
-      ></div>
 
       {/* Shop List */}
-      <table className="shop-table">
+      <div style={{ display: "flex" }}>
+        <div
+          className="my-3"
+          id="map"
+          ref={mapRef}
+          style={{ height: "400px", width: "60%", marginBottom: "20px", borderRadius: "20px" }}
+        ></div>
+        <div className="mx-4" style={{ width: "40%", padding: "10px" ,border: "1px solid", borderRadius: "5px"}}>
+          <table className="shop-table" style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
-          <tr>
-            <th>Shop Name</th>
-            <th>Distance</th>
-            <th>Price</th>
-            <th>Actions</th>
+          <tr style={{ borderBottom: "1px solid" }}>
+            <th style={{ padding: "8px", textAlign: "left" }}>Shop Name</th>
+            <th style={{ padding: "8px", textAlign: "left" }}>Distance</th>
+            <th style={{ padding: "8px", textAlign: "left" }}>Price</th>
+            <th style={{ padding: "8px", textAlign: "left" }}>Actions</th>
           </tr>
         </thead>
         <tbody id="shop-body">
           {shops.map((shop, index) => (
-            <tr key={index}>
-              <td>{shop.shop_name}</td>
-              <td>{shop.distance} km</td>
-              <td>{shop.price}</td>
-              <td className="actions">
-                <a
-                  onClick={() => handleViewOnMap(shop)}
-                  title="View on Map"
-                  style={{ cursor: "pointer", marginRight: "10px" }}
-                >
-                  <i className="fa fa-eye"></i>
-                </a>
-                <a
-                  onClick={() => handleBuyNow(shop)}
-                  title="Buy Now"
-                  style={{ cursor: "pointer" }}
-                >
-                  <i className="fa fa-shopping-cart"></i>
-                </a>
-              </td>
+            <tr key={index} style={{ borderBottom: "1px solid" }}>
+          <td style={{ padding: "8px" }}><b>{shop.shop_name}</b></td>
+          <td style={{ padding: "8px" }}>{shop.distance} km</td>
+          <td style={{ padding: "8px" }}>{shop.price}</td>
+          <td className="actions" style={{ padding: "8px" }}>
+            <a
+              onClick={() => handleViewOnMap(shop)}
+              title="View on Map"
+              style={{ cursor: "pointer", marginRight: "10px"}}
+            >
+              <i className="fa fa-eye"></i>
+            </a>
+            <a
+              onClick={() => handleBuyNow(shop)}
+              title="Buy Now"
+              style={{ cursor: "pointer"}}
+            >
+              <i className="fa fa-shopping-cart"></i>
+            </a>
+          </td>
             </tr>
           ))}
         </tbody>
-      </table>
+          </table>
+        </div>
+      </div>
 
       {/* Buy Popup */}
       {showBuyPopup && (
