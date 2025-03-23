@@ -147,15 +147,34 @@ function ShopList(props) {
     // Update the quantity for a medicine
     async function updateQuantity() {
         // Here you might also want to call an API to update the quantity.
-        let updatedList = [...medicineList];
-        updatedList[editIndex].quantity = editQuantity;
-        setMedicineList(updatedList);
-        props.showAlert("Quantity updated successfully", "success");
-        if (editModalRef.current) {
-            const modal = window.bootstrap.Modal.getInstance(editModalRef.current);
-            if (modal) {
-                modal.hide();
+        const data = {
+            request_type: "update_med",
+            email: localStorage.getItem("email"),
+            Med_data: {
+                id: medicineList[editIndex].id,
+                quantity: editQuantity,
+            },
+        };
+
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/medicine", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+            const result = await response.json();
+            if (response.ok && result.status === true) {
+                setMedicineList((prev) => {
+                    const newList = [...prev];
+                    newList[editIndex].quantity = editQuantity;
+                    return newList;
+                });
+                props.showAlert("Quantity updated successfully", "success");
+            } else {
+                props.showAlert(`Failed to update quantity: ${result.message}`, "danger");
             }
+        } catch (error) {
+            props.showAlert(`Error deleting medicine: ${error.message}`, "danger");
         }
     }
 
