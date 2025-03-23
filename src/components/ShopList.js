@@ -1,6 +1,9 @@
 // ShopList.js
 import React, { useState, useEffect, useRef } from "react";
 import "./ShopList.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { faPencil, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 function ShopList(props) {
     const [medicineList, setMedicineList] = useState([]);
@@ -82,9 +85,9 @@ function ShopList(props) {
             const result = await response.json();
             if (response.ok && result.status === true) {
                 setMedicineList((prev) => [...prev, medData]);
-                props.showprops.showAlert("Medicine added successfully","success");
+                props.showAlert("Medicine added successfully","success");
             } else {
-                props.showprops.showAlert(`Failed to add medicine: ${result.message}`,"danger");
+                props.showAlert(`Failed to add medicine: ${result.message}`,"danger");
             }
         } catch (error) {
             props.showAlert(`Error adding medicine: ${error.message}`, "danger");
@@ -201,13 +204,13 @@ function ShopList(props) {
                                                     className="btn btn-sm btn-outline-primary me-2"
                                                     onClick={() => openEditModal(index)}
                                                 >
-                                                    <i className="fas fa-edit"></i>
+                                                    <FontAwesomeIcon icon={faPencil} />
                                                 </button>
                                                 <button
                                                     className="btn btn-sm btn-outline-danger"
                                                     onClick={() => deleteMedicine(medicine.id)}
                                                 >
-                                                    <i className="fas fa-trash-alt"></i>
+                                                    <FontAwesomeIcon icon={faTrashCan} />
                                                 </button>
                                             </td>
                                         </tr>
