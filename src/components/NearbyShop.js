@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-// Uncomment the lines below if you decide to use Awesome Markers
+// Uncomment these lines if using awesome markers
 // import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
 // import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.js';
 
@@ -20,6 +20,8 @@ const NearbyShop = () => {
   const location = useLocation();
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  // New ref to store shop markers by shop id
+  const markersRef = useRef({});
 
   // State variables
   const [shops, setShops] = useState([]);
@@ -35,7 +37,7 @@ const NearbyShop = () => {
   const [showDetailsPopup, setShowDetailsPopup] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
 
-  // Get user location using Geolocation API
+  // Get user location using the Geolocation API
   const getLocation = () => {
     return new Promise((resolve, reject) => {
       if (navigator.geolocation) {
@@ -122,7 +124,7 @@ const NearbyShop = () => {
     }
   };
 
-  // Fetch shops on component mount
+  // Fetch shops when component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -135,7 +137,7 @@ const NearbyShop = () => {
     fetchData();
   }, []);
 
-  // Setup and update the map whenever the user location or shops change
+  // Setup and update the map when user location or shops change
   useEffect(() => {
     if (!userLocation || !mapRef.current) return;
 
@@ -158,7 +160,7 @@ const NearbyShop = () => {
       }
     ).addTo(mapInstanceRef.current);
 
-    // Add user location marker using a custom icon
+    // Add user location marker with a custom icon
     const redMarker = L.divIcon({
       html: '<i class="fa fa-home" style="color: red; font-size: 24px;"></i>',
       className: "custom-marker",
@@ -171,7 +173,10 @@ const NearbyShop = () => {
       .bindPopup("You are here")
       .openPopup();
 
-    // Add shop markers if available
+    // Reset markersRef for shop markers
+    markersRef.current = {};
+
+    // Add shop markers if available and store a reference for each marker
     if (shops && shops.length > 0) {
       shops.forEach((shop) => {
         if (
@@ -188,6 +193,10 @@ const NearbyShop = () => {
               `<b>${shop.shop_name}</b><br>Distance: ${shop.distance} km`
             );
 
+          // Store the marker reference using shop id as key
+          markersRef.current[shop.id] = marker;
+
+          // When a marker is clicked, fly to it and open the popup
           marker.on("click", () => {
             if (mapInstanceRef.current) {
               mapInstanceRef.current.flyTo(marker.getLatLng(), 15, {
@@ -217,7 +226,7 @@ const NearbyShop = () => {
     };
   }, [userLocation, shops]);
 
-  // Handle viewing a shop on the map
+  // Handle viewing a shop on the map: fly to the marker and open its popup
   const handleViewOnMap = (shop) => {
     if (mapInstanceRef.current) {
       mapInstanceRef.current.flyTo(
@@ -225,10 +234,14 @@ const NearbyShop = () => {
         15,
         { animate: true, duration: 1 }
       );
+      // Open the associated marker's popup (label)
+      if (markersRef.current[shop.id]) {
+        markersRef.current[shop.id].openPopup();
+      }
     }
   };
 
-  // Handle "Buy Now" button click
+  // Handle "Buy Now" click for a shop
   const handleBuyNow = (shop) => {
     setCurrentMedID(shop.id);
     setShopEmail(shop.shop_email);
@@ -239,7 +252,7 @@ const NearbyShop = () => {
     setShowBuyPopup(true);
   };
 
-  // Handle confirmation navigation
+  // Navigate to confirmation page
   const handleConfirmDetails = () => {
     navigate(
       `/confirmation?name=${medicineName}&quantity=${quantity}&price=${price}`
