@@ -1,16 +1,25 @@
 {
-  "name": "mediconnect",
+  "name": "ecometer",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
-    "@testing-library/user-event": "^13.5.0",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "axios": "^1.7.9",
+    "chart.js": "^4.4.7",
+    "cra-template": "1.2.0",
+    "crypto-browserify": "^3.12.1",
+    "dotenv": "^16.4.7",
+    "google-charts": "^2.0.0",
     "react": "^19.0.0",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
+    "react-google-charts": "^5.2.1",
+    "react-router-dom": "^7.1.5",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "recharts": "^2.15.1",
+    "web-vitals": "^4.2.4"
   },
   "scripts": {
     "start": "react-scripts start",
