@@ -9,6 +9,7 @@ import Signup from "./components/Signup";
 import About from "./components/About";
 import UserSearch from "./components/UserSearch";
 import NearbyShop from "./components/NearbyShop";
+import ShopList from "./components/ShopList";
 
 export default function App() {
   
@@ -110,6 +111,7 @@ export default function App() {
       <Route exact path="/user-search" element={<UserSearch />} />
       <Route exact path="/" element={<Landing />} />
       <Route exact path="/nearbyshops" element={<NearbyShop />} />
+      <Route exact path="/shop-list" element={<ShopList />} />
       </Routes>
     </div>
     </Router>
