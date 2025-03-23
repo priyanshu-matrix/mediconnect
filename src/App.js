@@ -30,7 +30,7 @@ export default function App() {
 
     document.body.style.background = "linear-gradient(300deg, #00bbf0, #00204a, #fdb44b)";
     document.body.style.backgroundSize = "180% 180%";
-    document.body.style.animation = "gradient-animation 7s ease infinite";
+    document.body.style.animation = "gradient-animation 18s ease infinite";
 
     // Add keyframes if they don't exist yet
     if (!document.getElementById('gradient-animation-style')) {
@@ -51,7 +51,7 @@ export default function App() {
 
     document.body.style.background = "linear-gradient(300deg, #66bfbf, #eaf6f6, #f76b8a)";
     document.body.style.backgroundSize = "180% 180%";
-    document.body.style.animation = "gradient-animation 7s ease infinite";
+    document.body.style.animation = "gradient-animation 18s ease infinite";
 
     // Add keyframes if they don't exist yet
     if (!document.getElementById('gradient-animation-style')) {
@@ -75,7 +75,7 @@ export default function App() {
   setmode("light");
   document.body.style.background = "linear-gradient(300deg, #66bfbf, #eaf6f6, #f76b8a)";
     document.body.style.backgroundSize = "180% 180%";
-    document.body.style.animation = "gradient-animation 7s ease infinite";
+    document.body.style.animation = "gradient-animation 18s ease infinite";
 
     // Add keyframes if they don't exist yet
     if (!document.getElementById('gradient-animation-style')) {
