@@ -70,7 +70,7 @@ function Navbar(props) {
                       aria-current="page"
                       to="/user-search"
                       onClick={() => {
-                        if (!localStorage.getItem("jwt_token")) {
+                        if (!localStorage.getItem("token")) {
                           props.showAlert("Please login first", "warning");
                           navigate("/login");
                         }
@@ -91,7 +91,7 @@ function Navbar(props) {
                       aria-current="page"
                       to="/shop-list"
                       onClick={() => {
-                        if (!localStorage.getItem("jwt_token")) {
+                        if (!localStorage.getItem("token")) {
                           props.showAlert("Please login first", "warning");
                           navigate("/login");
                         }
