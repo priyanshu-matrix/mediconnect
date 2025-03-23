@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import About from "./components/About";
 import UserSearch from "./components/UserSearch";
+import NearbyShop from "./components/NearbyShop";
 
 export default function App() {
   
@@ -108,6 +109,7 @@ export default function App() {
       <Route exact path="/signup" element={<Signup showAlert={showAlert} />} />
       <Route exact path="/user-search" element={<UserSearch />} />
       <Route exact path="/" element={<Landing />} />
+      <Route exact path="/nearbyshops" element={<NearbyShop />} />
       </Routes>
     </div>
     </Router>

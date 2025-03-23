@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const UserSearch = () => {
   const [searchInput, setSearchInput] = useState("");
   const [medicines, setMedicines] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
+  let navigate = useNavigate();
 
   // Fetch medicines on component mount
   useEffect(() => {
@@ -44,9 +46,7 @@ const UserSearch = () => {
 
   // Handle suggestion click
   const handleSuggestionClick = (medicine) => {
-    window.location.href = `/NearbyShops.html?medicine_name=${encodeURIComponent(
-      medicine
-    )}`;
+    navigate(`/nearbyshops?medicine_name=${encodeURIComponent(medicine)}`);
   };
 
   return (
