@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./ShopList.css";
 
-function ShopList() {
+function ShopList(props) {
     const [medicineList, setMedicineList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
@@ -39,10 +39,10 @@ function ShopList() {
             if (response.ok && result.status === true) {
                 setMedicineList(result.medicine);
             } else {
-                alert(`Failed to get data: ${result.message}`);
+                props.showAlert(`Failed to get data: ${result.message}`, "danger");
             }
         } catch (error) {
-            alert(`Error fetching data: ${error.message}`);
+            props.showAlert(`Error fetching data: ${error.message}`, "danger");
         }
         setLoading(false);
     }
@@ -82,12 +82,12 @@ function ShopList() {
             const result = await response.json();
             if (response.ok && result.status === true) {
                 setMedicineList((prev) => [...prev, medData]);
-                alert("Medicine added successfully");
+                props.showprops.showAlert("Medicine added successfully","success");
             } else {
-                alert(`Failed to add medicine: ${result.message}`);
+                props.showprops.showAlert(`Failed to add medicine: ${result.message}`,"danger");
             }
         } catch (error) {
-            alert(`Error adding medicine: ${error.message}`);
+            props.showAlert(`Error adding medicine: ${error.message}`, "danger");
         }
         // Reset form and hide modal
         setFormData({
@@ -122,12 +122,12 @@ function ShopList() {
             const result = await response.json();
             if (result.status === true) {
                 setMedicineList((prev) => prev.filter((med) => med.id !== id));
-                alert("Medicine deleted successfully");
+                props.showAlert("Medicine deleted successfully", "success");
             } else {
-                alert(`Failed to delete medicine: ${result.message}`);
+                props.showAlert(`Failed to delete medicine: ${result.message}`, "danger");
             }
         } catch (error) {
-            alert(`Error deleting medicine: ${error.message}`);
+            props.showAlert(`Error deleting medicine: ${error.message}`, "danger");
         }
     }
 
@@ -147,7 +147,7 @@ function ShopList() {
         let updatedList = [...medicineList];
         updatedList[editIndex].quantity = editQuantity;
         setMedicineList(updatedList);
-        alert("Quantity updated successfully");
+        props.showAlert("Quantity updated successfully", "success");
         if (editModalRef.current) {
             const modal = window.bootstrap.Modal.getInstance(editModalRef.current);
             if (modal) {

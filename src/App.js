@@ -111,7 +111,7 @@ export default function App() {
       <Route exact path="/user-search" element={<UserSearch />} />
       <Route exact path="/" element={<Landing />} />
       <Route exact path="/nearbyshops" element={<NearbyShop />} />
-      <Route exact path="/shop-list" element={<ShopList />} />
+      <Route exact path="/shop-list" element={<ShopList showAlert={showAlert}/>} />
       </Routes>
     </div>
     </Router>
