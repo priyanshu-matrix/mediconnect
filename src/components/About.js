@@ -10,27 +10,29 @@ const About = (props) => {
       </h1>
       <ul className="mx-1">
         <li>
-          Welcome to <b>MediConnect</b>, your simple energy consumption calculator.
+          Welcome to <b>MediConnect</b>, an innovative platform designed to simplify medicine stock management.
         </li>
         <li className="my-3">
-          With <b>EcoMeter</b>, you can easily calculate the energy consumption
-          of your appliances.
+          Whether you're a pharmacy, hospital, or managing personal stock, our system makes tracking and updating inventory easy and efficient.
         </li>
         <li className="my-3">
-          Our goal is to help you understand and reduce your energy footprint.
+          Our mission is to empower users to manage their medicine stock more effectively, saving time, reducing errors, and ensuring smooth operations.
         </li>
       </ul>
-      <h3 className="my-4">How to Use:</h3>
+      <h3 className="my-4">Key Features:</h3>
       <ul>
-        <li>Enter the appliance and its power rating (watts or kilowatts).</li>
+        <li>Real-time Stock Tracking: Monitor your medicine stock instantly and make data-driven decisions.</li>
         <li className="my-3">
-          Specify the duration of usage to calculate energy consumption in kWh.
+          User-Friendly Interface: A simple and intuitive design that ensures a seamless experience for everyone.
         </li>
         <li className="my-3">
-          Receive energy-saving tips tailored to your appliance.
+          Efficient Medicine Management: Add, edit, and delete medicine details with ease – all at your fingertips.
         </li>
         <li className="my-3">
-          Discover recommendations for energy-efficient alternatives.
+          Customizable for All Users: Whether for personal use or business, MediConnect adapts to your needs.
+        </li>
+        <li className="my-3">
+          Secure & Reliable: Your data is stored safely and securely, giving you peace of mind.
         </li>
       </ul>
       <p>
@@ -69,7 +71,6 @@ const About = (props) => {
               right: 0,
               bottom: 0,
               padding: "10px",
-
               textAlign: "right",
               zIndex: 1000,
             }}

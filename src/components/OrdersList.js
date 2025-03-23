@@ -40,7 +40,7 @@ function OrdersList(props) {
   }
 
   return (
-    <div style={{ color: "black" }}>
+    <div style={{ color: "black"  , marginTop: "50px" , height: "50vh"}}>
       <div className="list-and-form">
         {/* Orders List */}
         <div className="orders-list-container">

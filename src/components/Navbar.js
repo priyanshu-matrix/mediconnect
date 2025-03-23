@@ -74,65 +74,85 @@ function Navbar(props) {
                           props.showAlert("Please login first", "warning");
                           navigate("/login");
                         }
-                      }}
-                    >
-                      <b>Search</b>
-                    </Link>
-                  </li>
-                )}
-              {localStorage.getItem("token") &&
-                localStorage.getItem("accountType") === "shop" && (
-                  <li className="nav-item">
-                    <Link
-                      type="button"
-                      className={`nav-link ${
-                        location.pathname === "/shop-list" ? "active" : ""
-                      }`}
-                      aria-current="page"
-                      to="/shop-list"
-                      onClick={() => {
-                        if (!localStorage.getItem("token")) {
+                        }}
+                      >
+                        <b>Search</b>
+                      </Link>
+                      </li>
+                    )}
+                    {localStorage.getItem("token") &&
+                    localStorage.getItem("accountType") === "shop" && (
+                      <>
+                      <li className="nav-item">
+                        <Link
+                        type="button"
+                        className={`nav-link ${
+                          location.pathname === "/shop-list" ? "active" : ""
+                        }`}
+                        aria-current="page"
+                        to="/shop-list"
+                        onClick={() => {
+                          if (!localStorage.getItem("token")) {
                           props.showAlert("Please login first", "warning");
                           navigate("/login");
-                        }
-                      }}
-                    >
-                      <b>Stock</b>
-                    </Link>
-                  </li>
-                )}
-              <li className="nav-item ">
-                <Link
-                  className={`nav-link ${
-                    location.pathname === "/about" ? "active" : ""
-                  }`}
-                  to="/about"
-                >
-                  <b>About</b>
-                </Link>
-              </li>
-            </ul>
-            {!localStorage.getItem("token") ? (
-              <div className="d-flex">
-                {location.pathname !== "/welcome" && (
-                  <>
-                    <Link className="btn btn-outline-primary my-3" to="/signup">
-                      SignUp
-                    </Link>
+                          }
+                        }}
+                        >
+                        <b>Stock</b>
+                        </Link>
+                      </li>
+                      <li className="nav-item">
+                        <Link
+                        type="button"
+                        className={`nav-link ${
+                          location.pathname === "/orders" ? "active" : ""
+                        }`}
+                        aria-current="page"
+                        to="/orders"
+                        onClick={() => {
+                          if (!localStorage.getItem("token")) {
+                          props.showAlert("Please login first", "warning");
+                          navigate("/login");
+                          }
+                        }}
+                        >
+                        <b>Orders</b>
+                        </Link>
+                      </li>
+                      </>
+                    )}
+                    <li className="nav-item ">
                     <Link
-                      className="btn btn-outline-primary mx-2 my-3"
-                      to="/login"
+                      className={`nav-link ${
+                      location.pathname === "/about" ? "active" : ""
+                      }`}
+                      to="/about"
                     >
-                      Login
+                      <b>About</b>
                     </Link>
-                  </>
-                )}
-              </div>
-            ) : (
-              <button
-                className="btn btn-outline-success my-3"
-                type="button"
-                onClick={() => {
+                    </li>
+                  </ul>
+                  {!localStorage.getItem("token") ? (
+                    <div className="d-flex">
+                    {location.pathname !== "/welcome" && (
+                      <>
+                      <Link className="btn btn-outline-primary my-3" to="/signup">
+                        SignUp
+                      </Link>
+                      <Link
+                        className="btn btn-outline-primary mx-2 my-3"
+                        to="/login"
+                      >
+                        Login
+                      </Link>
+                      </>
+                    )}
+                    </div>
+                  ) : (
+                    <button
+                    className="btn btn-outline-success my-3"
+                    type="button"
+                    onClick={() => {
                   localStorage.removeItem("token");
                   navigate("/login");
                   props.showAlert("Logged out successfully", "success");
