@@ -32,8 +32,8 @@ const Confirmation = () => {
     }, [timeLeft, navigate]);
     
     return (
-        <div className="confirmation-container" style={{color: 'black'}}>
-            <div className="confirmation-card">
+        <div >
+            <div className="confirmation-card" style={{color: 'black', textAlign: 'center', padding: '20px', margin: 'auto', width: '50%', marginTop: '50px'}}>
                 <div className="success-checkmark">
                     <i className="checkmark">✓</i>
                 </div>
@@ -48,7 +48,7 @@ const Confirmation = () => {
                             <li key={index}>
                                 <strong>Name:</strong> {medicine.name} <br />
                                 <strong>Quantity:</strong> {medicine.quantity} <br />
-                                <strong>Price:</strong> ${medicine.price.toFixed(2)}
+                                <strong>Price:</strong> ₹{medicine.price.toFixed(2)}
                             </li>
                         ))}
                     </ul>
