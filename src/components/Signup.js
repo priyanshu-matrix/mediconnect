@@ -18,23 +18,25 @@ const Signup = (props) => {
 
   function getLocation() {
     return new Promise((resolve, reject) => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const lat = position.coords.latitude;
-                    const long = position.coords.longitude;
-                    // resolve({ lat, long });
-                    resolve({ lat: 21.2497572, long: 81.6012525 });
-                },
-                (error) => {
-                    alert("Error obtaining location");
-                    reject(error);
-                }
-            );
-        } else {
-            alert("Geolocation is not supported by this browser.");
-            reject(new Error("Geolocation is not supported by this browser."));
-        }
+      resolve({ lat: 21.2497572, long: 81.6012525 });
+
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(
+        //         (position) => {
+        //             const lat = position.coords.latitude;
+        //             const long = position.coords.longitude;
+        //             // resolve({ lat, long });
+        //             resolve({ lat: 21.2497572, long: 81.6012525 });
+        //         },
+        //         (error) => {
+        //             alert("Error obtaining location");
+        //             reject(error);
+        //         }
+        //     );
+        // } else {
+        //     alert("Geolocation is not supported by this browser.");
+        //     reject(new Error("Geolocation is not supported by this browser."));
+        // }
     });
 }
 
