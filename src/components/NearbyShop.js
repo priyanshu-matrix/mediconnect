@@ -40,6 +40,7 @@ const NearbyShop = (props) => {
   // Get user location using the Geolocation API
   const getLocation = () => {
     return new Promise((resolve, reject) => {
+      // Try browser geolocation first
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -47,14 +48,73 @@ const NearbyShop = (props) => {
             const long = position.coords.longitude;
             resolve({ lat, long });
           },
-          (error) => {
-            alert("Error obtaining location");
-            reject(error);
+          // If geolocation fails, try fetching from database
+          async (error) => {
+            console.log("Geolocation error, trying database:", error);
+            try {
+              const userEmail = localStorage.getItem("email");
+              if (!userEmail) {
+                throw new Error("User not logged in");
+              }
+              
+              const data = {
+                request_type: "get_user_location",
+                email: userEmail
+              };
+              
+              const response = await fetch("http://127.0.0.1:8000/api/location", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              });
+              
+              const result = await response.json();
+              if (result.status === true && result.location) {
+                resolve(result.location);
+              } else {
+                throw new Error("Could not retrieve location from database");
+              }
+            } catch (dbError) {
+              alert("Unable to determine your location");
+              reject(dbError);
+            }
           }
         );
       } else {
-        alert("Geolocation is not supported by this browser.");
-        reject(new Error("Geolocation is not supported by this browser."));
+        // Geolocation not supported, try database
+        (async () => {
+          try {
+            const userEmail = localStorage.getItem("email");
+            if (!userEmail) {
+              throw new Error("User not logged in");
+            }
+            
+            const data = {
+              request_type: "get_user_location",
+              email: userEmail
+            };
+            
+            const response = await fetch("http://127.0.0.1:8000/api/location", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            });
+            
+            const result = await response.json();
+            if (result.status === true && result.location) {
+              resolve(result.location);
+            } else {
+              throw new Error("Could not retrieve location from database");
+            }
+          } catch (dbError) {
+            alert("Geolocation not supported and couldn't retrieve saved location");
+            reject(dbError);
+          }
+        })();
       }
     });
   };
